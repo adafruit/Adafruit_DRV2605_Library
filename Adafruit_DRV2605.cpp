@@ -94,10 +94,8 @@ uint8_t Adafruit_DRV2605::readRegister8(uint8_t reg) {
     Wire.beginTransmission(DRV2605_ADDR);
     Wire.write((byte)reg);
     Wire.endTransmission();
-    Wire.beginTransmission(DRV2605_ADDR);
     Wire.requestFrom((byte)DRV2605_ADDR, (byte)1);
     x = Wire.read();
-    Wire.endTransmission();
 
   //  Serial.print("$"); Serial.print(reg, HEX); 
   //  Serial.print(": 0x"); Serial.println(x, HEX);
