@@ -43,7 +43,7 @@ Adafruit_DRV2605::Adafruit_DRV2605() {
 boolean Adafruit_DRV2605::begin() {
   Wire.begin();
   uint8_t id = readRegister8(DRV2605_REG_STATUS);
-  Serial.print("Status 0x"); Serial.println(id, HEX);
+  //Serial.print("Status 0x"); Serial.println(id, HEX);
   
   writeRegister8(DRV2605_REG_MODE, 0x00); // out of standby
   
