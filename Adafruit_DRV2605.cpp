@@ -113,3 +113,18 @@ void Adafruit_DRV2605::writeRegister8(uint8_t reg, uint8_t val) {
 
 /****************/
 
+
+// Allow users to use ERM motor or LRA motors
+
+void Adafruit_DRV2605::useERM ()
+{
+  writeRegister8(DRV2605_REG_FEEDBACK, readRegister8(DRV2605_REG_FEEDBACK) & 0x7F);
+}
+
+void Adafruit_DRV2605::useLRA ()
+{
+  writeRegister8(DRV2605_REG_FEEDBACK, readRegister8(DRV2605_REG_FEEDBACK) | 0x80);
+}
+
+
+
