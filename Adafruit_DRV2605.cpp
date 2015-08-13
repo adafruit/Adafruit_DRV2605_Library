@@ -85,6 +85,9 @@ void Adafruit_DRV2605::setMode(uint8_t mode) {
   writeRegister8(DRV2605_REG_MODE, mode);
 }
 
+void Adafruit_DRV2605::setRealtimeValue(uint8_t rtp) {
+  writeRegister8(DRV2605_REG_RTPIN, rtp);
+}
 
 /********************************************************************/
 
