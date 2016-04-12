@@ -81,6 +81,10 @@ void Adafruit_DRV2605::go() {
   writeRegister8(DRV2605_REG_GO, 1);
 }
 
+void Adafruit_DRV2605::stop() {
+  writeRegister8(DRV2605_REG_GO, 0);
+}
+
 void Adafruit_DRV2605::setMode(uint8_t mode) {
   writeRegister8(DRV2605_REG_MODE, mode);
 }
