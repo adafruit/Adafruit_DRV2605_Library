@@ -42,7 +42,7 @@ Adafruit_DRV2605::Adafruit_DRV2605() {
 /**************************************************************************/
 boolean Adafruit_DRV2605::begin() {
   Wire.begin();
-  uint8_t id = readRegister8(DRV2605_REG_STATUS);
+  // uint8_t id = readRegister8(DRV2605_REG_STATUS);
   //Serial.print("Status 0x"); Serial.println(id, HEX);
   
   writeRegister8(DRV2605_REG_MODE, 0x00); // out of standby
@@ -65,7 +65,37 @@ boolean Adafruit_DRV2605::begin() {
   writeRegister8(DRV2605_REG_FEEDBACK, readRegister8(DRV2605_REG_FEEDBACK) & 0x7F);
   // turn on ERM_OPEN_LOOP
   writeRegister8(DRV2605_REG_CONTROL3, readRegister8(DRV2605_REG_CONTROL3) | 0x20);
+  return true;
+}
 
+boolean Adafruit_DRV2605::pwmPassthrough() {
+  Wire.begin();
+  // uint8_t id = readRegister8(DRV2605_REG_STATUS);
+  //Serial.print("Status 0x"); Serial.println(id, HEX);
+  
+  writeRegister8(DRV2605_REG_MODE, 0x00); // out of standby
+  
+  writeRegister8(DRV2605_REG_RTPIN, 0x00); // no real-time-playback
+  
+  writeRegister8(DRV2605_REG_WAVESEQ1, 1); // strong click
+  writeRegister8(DRV2605_REG_WAVESEQ2, 0);
+  
+  writeRegister8(DRV2605_REG_OVERDRIVE, 0); // no overdrive
+  
+  writeRegister8(DRV2605_REG_SUSTAINPOS, 0);
+  writeRegister8(DRV2605_REG_SUSTAINNEG, 0);
+  writeRegister8(DRV2605_REG_BREAK, 0);
+  writeRegister8(DRV2605_REG_AUDIOMAX, 0x64);
+  
+  // ERM open loop
+  
+  // turn off N_ERM_LRA
+  writeRegister8(DRV2605_REG_FEEDBACK, readRegister8(DRV2605_REG_FEEDBACK) & 0x7F);
+  // turn on ERM_OPEN_LOOP
+  writeRegister8(DRV2605_REG_CONTROL3, readRegister8(DRV2605_REG_CONTROL3) | 0x20);
+  
+  setMode(DRV2605_MODE_PWMANALOG);
+  writeRegister8(DRV2605_REG_CONTROL3, 0x03);
   return true;
 }
 
