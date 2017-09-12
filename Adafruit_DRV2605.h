@@ -65,6 +65,7 @@
 #define DRV2605_REG_CONTROL2 0x1C
 #define DRV2605_REG_CONTROL3 0x1D
 #define DRV2605_REG_CONTROL4 0x1E
+#define DRV2605_REG_CONTROL5 0x1F
 #define DRV2605_REG_VBAT 0x21
 #define DRV2605_REG_LRARESON 0x22
 
@@ -74,6 +75,7 @@ class Adafruit_DRV2605 {
 
   Adafruit_DRV2605(void);
   boolean begin(void);  
+  boolean pwmPassthrough();
 
   void writeRegister8(uint8_t reg, uint8_t val);
   uint8_t readRegister8(uint8_t reg);
@@ -87,7 +89,7 @@ class Adafruit_DRV2605 {
   // The default is ERM, which is more common
   void useERM();
   void useLRA();
-
+  boolean calibrate();
  private:
 
 };
