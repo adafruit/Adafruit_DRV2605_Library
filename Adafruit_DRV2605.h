@@ -89,7 +89,7 @@ class Adafruit_DRV2605 {
   // The default is ERM, which is more common
   void useERM();
   void useLRA();
+  void autoCalibration();
  private:
 
 };
-
