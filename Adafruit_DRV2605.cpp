@@ -35,6 +35,7 @@ Adafruit_DRV2605::Adafruit_DRV2605() {
 }
 
 
+
 /**************************************************************************/
 /*! 
     @brief  Setups the HW
@@ -42,10 +43,11 @@ Adafruit_DRV2605::Adafruit_DRV2605() {
 /**************************************************************************/
 boolean Adafruit_DRV2605::begin() {
   Wire.begin();
-  // uint8_t id = readRegister8(DRV2605_REG_STATUS);
+  uint8_t id = readRegister8(DRV2605_REG_STATUS);
   //Serial.print("Status 0x"); Serial.println(id, HEX);
-  autoCalibration();
   
+  writeRegister8(DRV2605_REG_MODE, 0x00); // out of standby
+
   writeRegister8(DRV2605_REG_RTPIN, 0x00); // no real-time-playback
   
   writeRegister8(DRV2605_REG_WAVESEQ1, 1); // strong click
@@ -57,34 +59,45 @@ boolean Adafruit_DRV2605::begin() {
   writeRegister8(DRV2605_REG_AUDIOMAX, 0x64);
   
   // turn off N_ERM_LRA
-  uint8_t calVal = readRegister8(DRV2605_REG_FEEDBACK) & 0x03;
-  writeRegister8(DRV2605_REG_FEEDBACK, (readRegister8(DRV2605_REG_FEEDBACK) & 0x7C) | calVal);
+  // uint8_t calVal = readRegister8(DRV2605_REG_FEEDBACK) & 0x03;
+  writeRegister8(DRV2605_REG_FEEDBACK, (readRegister8(DRV2605_REG_FEEDBACK) & 0x7F) );//| calVal);
   // turn on ERM_OPEN_LOOP
   writeRegister8(DRV2605_REG_CONTROL3, readRegister8(DRV2605_REG_CONTROL3) | 0x20);
+
   return true;
 }
 
-boolean Adafruit_DRV2605::pwmPassthrough() {
-  Wire.begin();
+// boolean Adafruit_DRV2605::pwmPassthrough(uint16_t ratedVoltage, uint16_t overdrive) {
+//   Wire.begin();
 
-  autoCalibration();
+//   autoCalibration(ratedVoltage, overdrive);
 
-  uint8_t calVal = readRegister8(DRV2605_REG_FEEDBACK) & 0x03;
-  writeRegister8(DRV2605_REG_FEEDBACK, (readRegister8(DRV2605_REG_FEEDBACK) & 0x7C) );
+//   uint8_t calVal = readRegister8(DRV2605_REG_FEEDBACK) & 0x03;
+//   writeRegister8(DRV2605_REG_FEEDBACK, (readRegister8(DRV2605_REG_FEEDBACK) & 0x7C) | calVal);
 
-  setMode(DRV2605_MODE_PWMANALOG);
-  writeRegister8(DRV2605_REG_CONTROL3, 0x00);
-  return true;
-}
+//   setMode(DRV2605_MODE_PWMANALOG);
+//   writeRegister8(DRV2605_REG_CONTROL3, 0x00);
+//   return true;
+// }
 
 void Adafruit_DRV2605::autoCalibration() {
+	autoCalibration(1000, 1000);
+}
+
+void Adafruit_DRV2605::autoCalibration(uint16_t ratedVoltage, uint16_t overdrive) {
   Serial.println("Starting Auto-Calibration...\n");
 
-  writeRegister8(DRV2605_REG_MODE, 0x00); // out of standby
+  writeRegister8(DRV2605_REG_MODE, DRV2605_MODE_AUTOCAL); // out of standby and into auto cal mode
 
-  writeRegister8(DRV2605_REG_RATEDV, 0xFF); // 5V Rated Voltage
+  if (ratedVoltage <= 255)
+  	writeRegister8(DRV2605_REG_RATEDV, (uint8_t)ratedVoltage); // 5V Rated Voltage
+  else
+  	writeRegister8(DRV2605_REG_RATEDV, 0x3E); // Default
 
-  writeRegister8(DRV2605_REG_CLAMPV, 0xFF); // 5.5V Overdrive Voltage
+  if (overdrive <= 255)
+  	writeRegister8(DRV2605_REG_CLAMPV, (uint8_t)overdrive); // 5.5V Overdrive Voltage
+  else
+  	writeRegister8(DRV2605_REG_CLAMPV, 0x8C); // Default
 
   writeRegister8(DRV2605_REG_FEEDBACK, 0xB6);
 
@@ -94,21 +107,27 @@ void Adafruit_DRV2605::autoCalibration() {
 
   writeRegister8(DRV2605_REG_CONTROL3, 0x80);
 
-  setMode(1); // calibrate
+  setMode(DRV2605_MODE_AUTOCAL); // calibrate
 
   go();
 
-  uint8_t diag_results = (readRegister8(DRV2605_REG_STATUS) & 0x08);
 
-  volatile uint8_t goBit = (readRegister8(DRV2605_REG_GO) & 0x01);
+
+
+
+  
+
+  uint8_t goBit = (readRegister8(DRV2605_REG_GO) & 0x01);
   while (goBit != 0)
   {
     goBit = (readRegister8(DRV2605_REG_GO) & 0x01);
   }
 
+  uint8_t diag_results = (readRegister8(DRV2605_REG_STATUS) & 0x08);
+
   if (diag_results == 0x00)
   {
-    Serial.println("Auto-Calibration was successful: ");
+    Serial.println("Auto-Calibration was successful.");
   }
   else
   {
@@ -195,3 +214,6 @@ void Adafruit_DRV2605::useLRA ()
 {
   writeRegister8(DRV2605_REG_FEEDBACK, readRegister8(DRV2605_REG_FEEDBACK) | 0x80);
 }
+
+
+
