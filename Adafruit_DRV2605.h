@@ -75,7 +75,7 @@ class Adafruit_DRV2605 {
 
   Adafruit_DRV2605(void);
   boolean begin(void);  
-  boolean pwmPassthrough();
+  // boolean pwmPassthrough(uint16_t, uint16_t);
 
   void writeRegister8(uint8_t reg, uint8_t val);
   uint8_t readRegister8(uint8_t reg);
@@ -90,6 +90,8 @@ class Adafruit_DRV2605 {
   void useERM();
   void useLRA();
   void autoCalibration();
+  void autoCalibration(uint16_t, uint16_t);
  private:
 
 };
+
