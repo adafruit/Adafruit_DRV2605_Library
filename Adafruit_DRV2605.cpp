@@ -22,7 +22,7 @@
  * @section license License
  *
  * MIT license, all text above must be included in any redistribution.
- * 
+ *
  */
 /**************************************************************************/
 
@@ -53,12 +53,35 @@ Adafruit_DRV2605::Adafruit_DRV2605() {
 
 /**************************************************************************/
 /*!
+  @brief Setup HW using the default Wire
+  @return Return value from init()
+*/
+/**************************************************************************/
+boolean Adafruit_DRV2605::begin() {
+  _wire = &Wire;
+  return init();
+}
+
+/**************************************************************************/
+/*!
+  @brief Setup HW using a different Wire
+  @param theWire Pointer to a TwoWire object
+  @return Return value from init()
+*/
+/**************************************************************************/
+boolean Adafruit_DRV2605::begin(TwoWire *theWire) {
+  _wire = theWire;
+  return init();
+}
+
+/**************************************************************************/
+/*!
   @brief  Setup the HW
   @return Always true
 */
 /**************************************************************************/
-boolean Adafruit_DRV2605::begin() {
-  Wire.begin();
+boolean Adafruit_DRV2605::init() {
+  _wire->begin();
   uint8_t id = readRegister8(DRV2605_REG_STATUS);
   //Serial.print("Status 0x"); Serial.println(id, HEX);
 
@@ -171,11 +194,11 @@ uint8_t Adafruit_DRV2605::readRegister8(uint8_t reg) {
   uint8_t x;
 
   // use i2c
-  Wire.beginTransmission(DRV2605_ADDR);
-  Wire.write((byte)reg);
-  Wire.endTransmission();
-  Wire.requestFrom((byte)DRV2605_ADDR, (byte)1);
-  x = Wire.read();
+  _wire->beginTransmission(DRV2605_ADDR);
+  _wire->write((byte)reg);
+  _wire->endTransmission();
+  _wire->requestFrom((byte)DRV2605_ADDR, (byte)1);
+  x = _wire->read();
 
   //  Serial.print("$"); Serial.print(reg, HEX);
   //  Serial.print(": 0x"); Serial.println(x, HEX);
@@ -192,10 +215,10 @@ uint8_t Adafruit_DRV2605::readRegister8(uint8_t reg) {
 /**************************************************************************/
 void Adafruit_DRV2605::writeRegister8(uint8_t reg, uint8_t val) {
   // use i2c
-  Wire.beginTransmission(DRV2605_ADDR);
-  Wire.write((byte)reg);
-  Wire.write((byte)val);
-  Wire.endTransmission();
+  _wire->beginTransmission(DRV2605_ADDR);
+  _wire->write((byte)reg);
+  _wire->write((byte)val);
+  _wire->endTransmission();
 }
 
 /**************************************************************************/
