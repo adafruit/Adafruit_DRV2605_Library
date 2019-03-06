@@ -53,19 +53,8 @@ Adafruit_DRV2605::Adafruit_DRV2605() {
 
 /**************************************************************************/
 /*!
-  @brief Setup HW using the default Wire
-  @return Return value from init()
-*/
-/**************************************************************************/
-boolean Adafruit_DRV2605::begin() {
-  _wire = &Wire;
-  return init();
-}
-
-/**************************************************************************/
-/*!
-  @brief Setup HW using a different Wire
-  @param theWire Pointer to a TwoWire object
+  @brief Setup HW using a specified Wire
+  @param theWire Pointer to a TwoWire object, defaults to &Wire
   @return Return value from init()
 */
 /**************************************************************************/
