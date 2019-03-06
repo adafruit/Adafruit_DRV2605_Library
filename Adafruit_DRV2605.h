@@ -81,8 +81,9 @@
 class Adafruit_DRV2605 {
   public:
     Adafruit_DRV2605(void);
-    boolean begin(void);
+    boolean begin(TwoWire *theWire = &Wire);
 
+    boolean init();
     void writeRegister8(uint8_t reg, uint8_t val);
     uint8_t readRegister8(uint8_t reg);
     void setWaveform(uint8_t slot, uint8_t w);
@@ -97,5 +98,5 @@ class Adafruit_DRV2605 {
     void useLRA();
 
   private:
-
+    TwoWire *_wire;
 };
