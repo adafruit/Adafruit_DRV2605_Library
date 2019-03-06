@@ -1,7 +1,7 @@
 /*!
  * @file Adafruit_DRV2605.h
  *
- * This is a library for the Adafruit DRV2605L Haptic Driver ----> http://www.adafruit.com/products/2306
+ * This is a library for the Adafruit DRV2605L Haptic Driver ----> http://www.adafruit.com/products/2305
  *
  * Check out the links above for our tutorials and wiring diagrams.
  *
