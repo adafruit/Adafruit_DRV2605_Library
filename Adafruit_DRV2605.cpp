@@ -55,11 +55,15 @@ Adafruit_DRV2605::Adafruit_DRV2605() {
 /*!
   @brief Setup HW using a specified Wire
   @param theWire Pointer to a TwoWire object, defaults to &Wire
+  @param runBegin Run begin() or not, useful when using non-standard i2c pins
   @return Return value from init()
 */
 /**************************************************************************/
-boolean Adafruit_DRV2605::begin(TwoWire *theWire) {
+boolean Adafruit_DRV2605::begin(TwoWire *theWire, boolean runBegin) {
   _wire = theWire;
+  if (runBegin) {
+    _wire->begin();
+  }
   return init();
 }
 
@@ -70,7 +74,6 @@ boolean Adafruit_DRV2605::begin(TwoWire *theWire) {
 */
 /**************************************************************************/
 boolean Adafruit_DRV2605::init() {
-  _wire->begin();
   uint8_t id = readRegister8(DRV2605_REG_STATUS);
   //Serial.print("Status 0x"); Serial.println(id, HEX);
 

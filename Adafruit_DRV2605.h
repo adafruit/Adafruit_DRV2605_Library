@@ -81,7 +81,7 @@
 class Adafruit_DRV2605 {
   public:
     Adafruit_DRV2605(void);
-    boolean begin(TwoWire *theWire = &Wire);
+    boolean begin(TwoWire *theWire = &Wire, boolean runBegin = true);
 
     boolean init();
     void writeRegister8(uint8_t reg, uint8_t val);
