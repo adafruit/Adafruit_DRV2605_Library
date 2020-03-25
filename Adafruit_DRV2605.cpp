@@ -5,7 +5,8 @@
  *
  * @section intro_sec Introduction
  *
- * This is a library for the Adafruit DRV2605L Haptic Driver ----> http://www.adafruit.com/products/2305
+ * This is a library for the Adafruit DRV2605L Haptic Driver ---->
+ * http://www.adafruit.com/products/2305
  *
  * Check out the links above for our tutorials and wiring diagrams.
  *
@@ -27,13 +28,13 @@
 /**************************************************************************/
 
 #if ARDUINO >= 100
- #include "Arduino.h"
+#include "Arduino.h"
 #else
- #include "WProgram.h"
+#include "WProgram.h"
 #endif
 
-#include <Wire.h>
 #include <Adafruit_DRV2605.h>
+#include <Wire.h>
 
 /*========================================================================*/
 /*                            CONSTRUCTORS                                */
@@ -44,8 +45,7 @@
   @brief  Instantiates a new DRV2605 class. I2C, no address adjustments or pins
 */
 /**************************************************************************/
-Adafruit_DRV2605::Adafruit_DRV2605() {
-}
+Adafruit_DRV2605::Adafruit_DRV2605() {}
 
 /*========================================================================*/
 /*                           PUBLIC FUNCTIONS                             */
@@ -72,7 +72,7 @@ boolean Adafruit_DRV2605::begin(TwoWire *theWire) {
 boolean Adafruit_DRV2605::init() {
   _wire->begin();
   uint8_t id = readRegister8(DRV2605_REG_STATUS);
-  //Serial.print("Status 0x"); Serial.println(id, HEX);
+  // Serial.print("Status 0x"); Serial.println(id, HEX);
 
   writeRegister8(DRV2605_REG_MODE, 0x00); // out of standby
 
@@ -91,9 +91,11 @@ boolean Adafruit_DRV2605::init() {
   // ERM open loop
 
   // turn off N_ERM_LRA
-  writeRegister8(DRV2605_REG_FEEDBACK, readRegister8(DRV2605_REG_FEEDBACK) & 0x7F);
+  writeRegister8(DRV2605_REG_FEEDBACK,
+                 readRegister8(DRV2605_REG_FEEDBACK) & 0x7F);
   // turn on ERM_OPEN_LOOP
-  writeRegister8(DRV2605_REG_CONTROL3, readRegister8(DRV2605_REG_CONTROL3) | 0x20);
+  writeRegister8(DRV2605_REG_CONTROL3,
+                 readRegister8(DRV2605_REG_CONTROL3) | 0x20);
 
   return true;
 }
@@ -104,13 +106,13 @@ boolean Adafruit_DRV2605::init() {
   @param slot The waveform slot to set, from 0 to 7
   @param w The waveform sequence value, refers to an index in the ROM library.
 
-    Playback starts at slot 0 and continues through to slot 7, stopping if it encounters
-    a value of 0. A list of available waveforms can be found in section 11.2
-    of the datasheet: http://www.adafruit.com/datasheets/DRV2605.pdf
+    Playback starts at slot 0 and continues through to slot 7, stopping if it
+  encounters a value of 0. A list of available waveforms can be found in
+  section 11.2 of the datasheet: http://www.adafruit.com/datasheets/DRV2605.pdf
 */
 /**************************************************************************/
 void Adafruit_DRV2605::setWaveform(uint8_t slot, uint8_t w) {
-  writeRegister8(DRV2605_REG_WAVESEQ1+slot, w);
+  writeRegister8(DRV2605_REG_WAVESEQ1 + slot, w);
 }
 
 /**************************************************************************/
@@ -118,7 +120,8 @@ void Adafruit_DRV2605::setWaveform(uint8_t slot, uint8_t w) {
   @brief Select the waveform library to use.
   @param lib Library to use, 0 = Empty, 1-5 are ERM, 6 is LRA.
 
-    See section 7.6.4 in the datasheet for more details: http://www.adafruit.com/datasheets/DRV2605.pdf
+    See section 7.6.4 in the datasheet for more details:
+  http://www.adafruit.com/datasheets/DRV2605.pdf
 */
 /**************************************************************************/
 void Adafruit_DRV2605::selectLibrary(uint8_t lib) {
@@ -130,23 +133,20 @@ void Adafruit_DRV2605::selectLibrary(uint8_t lib) {
   @brief Start playback of the waveforms (start moving!).
 */
 /**************************************************************************/
-void Adafruit_DRV2605::go() {
-  writeRegister8(DRV2605_REG_GO, 1);
-}
+void Adafruit_DRV2605::go() { writeRegister8(DRV2605_REG_GO, 1); }
 
 /**************************************************************************/
 /*!
   @brief Stop playback.
 */
 /**************************************************************************/
-void Adafruit_DRV2605::stop() {
-  writeRegister8(DRV2605_REG_GO, 0);
-}
+void Adafruit_DRV2605::stop() { writeRegister8(DRV2605_REG_GO, 0); }
 
 /**************************************************************************/
 /*!
   @brief Set the device mode.
-  @param mode Mode value, see datasheet section 7.6.2: http://www.adafruit.com/datasheets/DRV2605.pdf
+  @param mode Mode value, see datasheet section 7.6.2:
+  http://www.adafruit.com/datasheets/DRV2605.pdf
 
     0: Internal trigger, call go() to start playback\n
     1: External trigger, rising edge on IN pin starts playback\n
@@ -164,7 +164,8 @@ void Adafruit_DRV2605::setMode(uint8_t mode) {
 
 /**************************************************************************/
 /*!
-  @brief Set the realtime value when in RTP mode, used to directly drive the haptic motor.
+  @brief Set the realtime value when in RTP mode, used to directly drive the
+  haptic motor.
   @param rtp 8-bit drive value.
 */
 /**************************************************************************/
@@ -215,8 +216,9 @@ void Adafruit_DRV2605::writeRegister8(uint8_t reg, uint8_t val) {
   @brief Use ERM (Eccentric Rotating Mass) mode.
 */
 /**************************************************************************/
-void Adafruit_DRV2605::useERM () {
-  writeRegister8(DRV2605_REG_FEEDBACK, readRegister8(DRV2605_REG_FEEDBACK) & 0x7F);
+void Adafruit_DRV2605::useERM() {
+  writeRegister8(DRV2605_REG_FEEDBACK,
+                 readRegister8(DRV2605_REG_FEEDBACK) & 0x7F);
 }
 
 /**************************************************************************/
@@ -224,6 +226,7 @@ void Adafruit_DRV2605::useERM () {
   @brief Use LRA (Linear Resonance Actuator) mode.
 */
 /**************************************************************************/
-void Adafruit_DRV2605::useLRA () {
-  writeRegister8(DRV2605_REG_FEEDBACK, readRegister8(DRV2605_REG_FEEDBACK) | 0x80);
+void Adafruit_DRV2605::useLRA() {
+  writeRegister8(DRV2605_REG_FEEDBACK,
+                 readRegister8(DRV2605_REG_FEEDBACK) | 0x80);
 }
