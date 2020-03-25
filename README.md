@@ -1,4 +1,4 @@
-# Adafruit DRV2605 Library [![Build Status](https://travis-ci.com/adafruit/Adafruit_DRV2605_Library.svg?branch=master)](https://travis-ci.com/adafruit/Adafruit_DRV2605_Library)
+# Adafruit DRV2605 Library [![Build Status](https://github.com/adafruit/Adafruit_DRV2605_Library/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_DRV2605_Library/actions)
 
 This is a library for the Adafruit DRV2605L Haptic Driver ----> http://www.adafruit.com/products/2305
 
