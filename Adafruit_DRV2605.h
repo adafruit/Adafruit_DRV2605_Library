@@ -19,6 +19,9 @@
  */
 /**************************************************************************/
 
+#ifndef _ADAFRUIT_DRV2605_H
+#define _ADAFRUIT_DRV2605_H
+
 #if ARDUINO >= 100
 #include "Arduino.h"
 #else
@@ -106,3 +109,5 @@ public:
 private:
   TwoWire *_wire;
 };
+
+#endif
