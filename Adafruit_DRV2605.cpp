@@ -34,7 +34,6 @@
 #endif
 
 #include <Adafruit_DRV2605.h>
-#include <Wire.h>
 
 /*========================================================================*/
 /*                            CONSTRUCTORS                                */
@@ -59,7 +58,9 @@ Adafruit_DRV2605::Adafruit_DRV2605() {}
 */
 /**************************************************************************/
 boolean Adafruit_DRV2605::begin(TwoWire *theWire) {
-  _wire = theWire;
+  if (i2c_dev)
+    delete i2c_dev;
+  i2c_dev = new Adafruit_I2CDevice(DRV2605_ADDR, theWire);
   return init();
 }
 
@@ -70,7 +71,8 @@ boolean Adafruit_DRV2605::begin(TwoWire *theWire) {
 */
 /**************************************************************************/
 boolean Adafruit_DRV2605::init() {
-  _wire->begin();
+  if (!i2c_dev->begin())
+    return false;
   uint8_t id = readRegister8(DRV2605_REG_STATUS);
   // Serial.print("Status 0x"); Serial.println(id, HEX);
 
@@ -181,19 +183,9 @@ void Adafruit_DRV2605::setRealtimeValue(uint8_t rtp) {
 */
 /**************************************************************************/
 uint8_t Adafruit_DRV2605::readRegister8(uint8_t reg) {
-  uint8_t x;
-
-  // use i2c
-  _wire->beginTransmission(DRV2605_ADDR);
-  _wire->write((byte)reg);
-  _wire->endTransmission();
-  _wire->requestFrom((byte)DRV2605_ADDR, (byte)1);
-  x = _wire->read();
-
-  //  Serial.print("$"); Serial.print(reg, HEX);
-  //  Serial.print(": 0x"); Serial.println(x, HEX);
-
-  return x;
+  uint8_t buffer[1] = {reg};
+  i2c_dev->write_then_read(buffer, 1, buffer, 1);
+  return buffer[0];
 }
 
 /**************************************************************************/
@@ -204,11 +196,8 @@ uint8_t Adafruit_DRV2605::readRegister8(uint8_t reg) {
 */
 /**************************************************************************/
 void Adafruit_DRV2605::writeRegister8(uint8_t reg, uint8_t val) {
-  // use i2c
-  _wire->beginTransmission(DRV2605_ADDR);
-  _wire->write((byte)reg);
-  _wire->write((byte)val);
-  _wire->endTransmission();
+  uint8_t buffer[2] = {reg, val};
+  i2c_dev->write(buffer, 2);
 }
 
 /**************************************************************************/

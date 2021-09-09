@@ -28,7 +28,7 @@
 #include "WProgram.h"
 #endif
 
-#include <Wire.h>
+#include <Adafruit_I2CDevice.h>
 
 #define DRV2605_ADDR 0x5A ///< Device I2C address
 
@@ -107,7 +107,7 @@ public:
   void useLRA();
 
 private:
-  TwoWire *_wire;
+  Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface
 };
 
 #endif
