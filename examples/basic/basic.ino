@@ -5,9 +5,12 @@ Adafruit_DRV2605 drv;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("DRV test");
-  drv.begin();
-  
+  Serial.println("Adafruit DRV2605 Basic test");
+  if (! drv.begin()) {
+    Serial.println("Could not find DRV2605");
+    while (1) delay(10);
+  }
+ 
   drv.selectLibrary(1);
   
   // I2C trigger by sending 'go' command 

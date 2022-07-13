@@ -57,7 +57,7 @@ Adafruit_DRV2605::Adafruit_DRV2605() {}
   @return Return value from init()
 */
 /**************************************************************************/
-boolean Adafruit_DRV2605::begin(TwoWire *theWire) {
+bool Adafruit_DRV2605::begin(TwoWire *theWire) {
   if (i2c_dev)
     delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(DRV2605_ADDR, theWire);
@@ -70,7 +70,7 @@ boolean Adafruit_DRV2605::begin(TwoWire *theWire) {
   @return Always true
 */
 /**************************************************************************/
-boolean Adafruit_DRV2605::init() {
+bool Adafruit_DRV2605::init() {
   if (!i2c_dev->begin())
     return false;
   uint8_t id = readRegister8(DRV2605_REG_STATUS);
