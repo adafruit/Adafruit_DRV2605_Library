@@ -73,7 +73,7 @@ bool Adafruit_DRV2605::begin(TwoWire *theWire) {
 bool Adafruit_DRV2605::init() {
   if (!i2c_dev->begin())
     return false;
-  uint8_t id = readRegister8(DRV2605_REG_STATUS);
+  // uint8_t id = readRegister8(DRV2605_REG_STATUS);
   // Serial.print("Status 0x"); Serial.println(id, HEX);
 
   writeRegister8(DRV2605_REG_MODE, 0x00); // out of standby
