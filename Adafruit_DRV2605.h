@@ -100,7 +100,7 @@ public:
   void go(void);
   void stop(void);
   void setMode(uint8_t mode);
-  void setRealtimeValue(uint8_t rtp);
+  void setRealtimeValue(int8_t rtp);
   // Select ERM (Eccentric Rotating Mass) or LRA (Linear Resonant Actuator)
   // vibration motor The default is ERM, which is more common
   void useERM();

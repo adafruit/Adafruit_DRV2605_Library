@@ -168,11 +168,19 @@ void Adafruit_DRV2605::setMode(uint8_t mode) {
 /*!
   @brief Set the realtime value when in RTP mode, used to directly drive the
   haptic motor.
-  @param rtp 8-bit drive value.
+  @param rtp 8-bit signed drive value
+
+    drive value | output voltage | vibration intensity
+    -128        | -V             | 100%
+    0           | 0              | 0%
+    127         | V              | 100%
+
+  See Figure 24 in the datasheet for more details:
+    http://www.adafruit.com/datasheets/DRV2605.pdf
 */
 /**************************************************************************/
-void Adafruit_DRV2605::setRealtimeValue(uint8_t rtp) {
-  writeRegister8(DRV2605_REG_RTPIN, rtp);
+void Adafruit_DRV2605::setRealtimeValue(int8_t rtp) {
+  writeRegister8(DRV2605_REG_RTPIN, (uint8_t)rtp);
 }
 
 /**************************************************************************/
